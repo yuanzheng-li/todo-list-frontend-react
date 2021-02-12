@@ -14,8 +14,9 @@ export default function TodoList({ todoList, listTitle, type, toggleCompleteness
     case 'done':
       processedList = todoList
         .filter((todo) => todo.complete)
-        .sort((a, b) => a.name.localeCompare(b.name))
-        .slice(0, DONE_LIST_COUNT);
+        .sort((a, b) => b.updatedAt - a.updatedAt)
+        .slice(0, DONE_LIST_COUNT)
+        .sort((a, b) => a.name.localeCompare(b.name));
       break;
     default:
       processedList = [...todoList];

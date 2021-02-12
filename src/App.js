@@ -53,6 +53,7 @@ function App() {
       id: todoList.length + 1,
       name,
       complete: false,
+      updatedAt: Date.now()
     };
 
     try {
@@ -90,9 +91,7 @@ function App() {
 
   const toggleCompleteness = async (id) => {
     const updatedTodoList = todoList.map((task) => {
-      return task.id === Number(id) ?
-        {...task, complete: !task.complete} :
-        {...task};
+      return task.id === Number(id) ? { ...task, complete: !task.complete, updatedAt: Date.now() } : { ...task };
     });
 
     const updatedTask = updatedTodoList.find((task) => task.id === Number(id));
