@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react';
 import { CssBaseline } from '@material-ui/core';
 
 import './App.css';
@@ -7,11 +7,35 @@ import Header from './header/Header';
 import AddTask from './add-task/AddTask';
 import SearchBox from './search-box/SearchBox';
 import TodoList from './todo-list/TodoList';
-import tasks from './tasks.json';
+import fetchData from './utils/fetchData';
 
 function App() {
-  const [todoList, setToDoList] = useState(tasks);
+  const [todoList, setToDoList] = useState([]);
   const [searchField, setSearchField] = useState('');
+  const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    async function fetchTasks() {
+      setIsLoading(true);
+      setError(null);
+      try {
+        const tasksRes = await fetchData(`${process.env.REACT_APP_TASKS_API_URL}`, {
+          method: 'get',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+        setToDoList(tasksRes.tasks);
+      } catch(error) {
+        setError(error);
+      }
+
+      setIsLoading(false);
+    }
+
+    fetchTasks();
+  }, []);
 
   const handleSearch = (e) => {
     setSearchField(e.target.value)
@@ -52,8 +76,19 @@ function App() {
         <SearchBox handleSearch={handleSearch} />
       </section>
       <main>
-        <TodoList todoList={filteredTodoList()} listTitle='To Do' type='todo' toggleCompleteness={toggleCompleteness} />
-        <TodoList todoList={filteredTodoList()} listTitle='Done' type='done' toggleCompleteness={toggleCompleteness} />
+        { error && <h2>Something went wrong.</h2> }
+        {
+          !error &&
+          (isLoading ?
+            (<h2>Loading...</h2>) :
+            (
+              <>
+                <TodoList todoList={filteredTodoList()} listTitle='To Do' type='todo' toggleCompleteness={toggleCompleteness} />
+                <TodoList todoList={filteredTodoList()} listTitle='Done' type='done' toggleCompleteness={toggleCompleteness} />
+              </>
+            )
+          )
+        }
       </main>
     </>
   );
