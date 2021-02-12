@@ -21,12 +21,20 @@ function App() {
     return todoList.filter((todo) => todo.name.toLowerCase().includes(searchField.toLowerCase()));
   }
 
+  const handleAdd = (name) => {
+    setToDoList([...todoList, {
+      id: todoList.length + 1,
+      name,
+      complete: false
+    }]);
+  };
+
   return (
     <>
       <CssBaseline />
       <Header />
       <section className="add-and-search">
-        <AddTask />
+        <AddTask handleAdd={handleAdd} />
         <SearchBox handleSearch={handleSearch} />
       </section>
       <main>
