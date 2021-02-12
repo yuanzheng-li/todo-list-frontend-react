@@ -4,6 +4,11 @@ export default async function fetchData(url, options) {
     if(!response.ok) {
       throw new Error('Operation failed');
     }
+
+    if(response.status === 204) {
+      return;
+    }
+    
     const jsonRes = await response.json();
     return jsonRes;
   } catch(error) {

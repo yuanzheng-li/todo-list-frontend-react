@@ -59,7 +59,7 @@ function App() {
       await fetchData(`${process.env.REACT_APP_TASKS_API_URL}`, {
         method: 'post',
         headers: {
-          'Content-type': 'application/json'
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify(newTask)
       });
@@ -88,14 +88,29 @@ function App() {
     }
   };
 
-  const toggleCompleteness = (id) => {
+  const toggleCompleteness = async (id) => {
     const updatedTodoList = todoList.map((task) => {
       return task.id === Number(id) ?
         {...task, complete: !task.complete} :
         {...task};
     });
 
-    setToDoList(updatedTodoList);
+    const updatedTask = updatedTodoList.find((task) => task.id === Number(id));
+
+    try {
+      await fetchData(`${process.env.REACT_APP_TASKS_API_URL}/${id}`, {
+        method: 'put',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updatedTask),
+      });
+
+      setToDoList(updatedTodoList);
+    } catch (error) {
+      setNonLayoutBlockError(error);
+      setOpenErrorSnackbar(true);
+    }
   };
 
   const handleCloseErrorSnackbar = () => {
