@@ -29,10 +29,14 @@ function App() {
     }]);
   };
 
+  const handleDeleteAll = () => {
+    setToDoList([]);
+  };
+
   return (
     <>
       <CssBaseline />
-      <Header />
+      <Header handleDeleteAll={handleDeleteAll} />
       <section className="add-and-search">
         <AddTask handleAdd={handleAdd} />
         <SearchBox handleSearch={handleSearch} />
