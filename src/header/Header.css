@@ -1,0 +1,16 @@
+header {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  column-gap: 6rem;
+}
+
+header > h1 {
+  margin-left: 3rem;
+  justify-self: start;
+}
+
+header > a {
+  margin-right: 3rem;
+  justify-self: end;
+}

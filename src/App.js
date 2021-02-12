@@ -1,7 +1,7 @@
 import './App.css';
 import { CssBaseline } from '@material-ui/core';
 
-import Header from './header/header';
+import Header from './header/Header';
 import AddTask from './add-task/AddTask';
 import SearchBox from './search-box/SearchBox';
 import TodoList from './todo-list/TodoList';
@@ -42,14 +42,14 @@ function App() {
     <>
       <CssBaseline />
       <Header />
-      <section>
+      <section className="add-and-search">
         <AddTask />
         <SearchBox />
       </section>
-      <section>
+      <main>
         <TodoList todoList={incompleteList} listTitle='To Do' />
         <TodoList todoList={completeList} listTitle='Done' />
-      </section>
+      </main>
     </>
   );
 }
