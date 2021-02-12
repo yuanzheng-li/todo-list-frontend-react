@@ -33,17 +33,27 @@ function App() {
     setToDoList([]);
   };
 
+  const toggleCompleteness = (id) => {
+    const updatedTodoList = todoList.map((task) => {
+      return task.id === Number(id) ?
+        {...task, complete: !task.complete} :
+        {...task};
+    });
+
+    setToDoList(updatedTodoList);
+  };
+
   return (
     <>
       <CssBaseline />
       <Header handleDeleteAll={handleDeleteAll} />
-      <section className="add-and-search">
+      <section className='add-and-search'>
         <AddTask handleAdd={handleAdd} />
         <SearchBox handleSearch={handleSearch} />
       </section>
       <main>
-        <TodoList todoList={filteredTodoList()} listTitle='To Do' type='todo' />
-        <TodoList todoList={filteredTodoList()} listTitle='Done' type='done' />
+        <TodoList todoList={filteredTodoList()} listTitle='To Do' type='todo' toggleCompleteness={toggleCompleteness} />
+        <TodoList todoList={filteredTodoList()} listTitle='Done' type='done' toggleCompleteness={toggleCompleteness} />
       </main>
     </>
   );
