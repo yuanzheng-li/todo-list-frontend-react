@@ -1,0 +1,62 @@
+[
+  {
+    "id": 1,
+    "name": "Grocery shopping",
+    "complete": false
+  },
+  {
+    "id": 2,
+    "name": "Buy a board game",
+    "complete": true
+  },
+  {
+    "id": 3,
+    "name": "Play FIFA",
+    "complete": false
+  },
+  {
+    "id": 4,
+    "name": "Pick up dinner",
+    "complete": true
+  },
+  {
+    "id": 5,
+    "name": "Watch a movie",
+    "complete": false
+  },
+  {
+    "id": 6,
+    "name": "Read a book",
+    "complete": false
+  },
+  {
+    "id": 7,
+    "name": "Work out",
+    "complete": false
+  },
+  {
+    "id": 8,
+    "name": "Do laundry",
+    "complete": false
+  },
+  {
+    "id": 9,
+    "name": "Coding",
+    "complete": false
+  },
+  {
+    "id": 10,
+    "name": "Prepare Interview",
+    "complete": false
+  },
+  {
+    "id": 11,
+    "name": "Take a walk",
+    "complete": false
+  },
+  {
+    "id": 12,
+    "name": "Learn system design",
+    "complete": false
+  }
+]
