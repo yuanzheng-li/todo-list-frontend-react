@@ -8,17 +8,20 @@ import AddTask from './add-task/AddTask';
 import SearchBox from './search-box/SearchBox';
 import TodoList from './todo-list/TodoList';
 import fetchData from './utils/fetchData';
+import ErrorSnackbar from './error-snackbar/ErrorSnackbar';
 
 function App() {
   const [todoList, setToDoList] = useState([]);
   const [searchField, setSearchField] = useState('');
-  const [error, setError] = useState(null);
+  const [layoutBlockError, setLayoutBlockError] = useState(null);
+  const [nonLayoutBlockError, setNonLayoutBlockError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [openErrorSnackbar, setOpenErrorSnackbar] = useState(false);
 
   useEffect(() => {
     async function fetchTasks() {
       setIsLoading(true);
-      setError(null);
+      setLayoutBlockError(null);
       try {
         const tasksRes = await fetchData(`${process.env.REACT_APP_TASKS_API_URL}`, {
           method: 'get',
@@ -28,7 +31,7 @@ function App() {
         });
         setToDoList(tasksRes.tasks);
       } catch(error) {
-        setError(error);
+        setLayoutBlockError(error);
       }
 
       setIsLoading(false);
@@ -53,8 +56,17 @@ function App() {
     }]);
   };
 
-  const handleDeleteAll = () => {
-    setToDoList([]);
+  const handleDeleteAll = async () => {
+    try {
+      await fetchData(`${process.env.REACT_APP_TASKS_API_URL}`, {
+        method: 'delete',
+      });
+
+      setToDoList([]);
+    } catch(error) {
+      setNonLayoutBlockError(error);
+      setOpenErrorSnackbar(true);
+    }
   };
 
   const toggleCompleteness = (id) => {
@@ -67,6 +79,10 @@ function App() {
     setToDoList(updatedTodoList);
   };
 
+  const handleCloseErrorSnackbar = () => {
+    setOpenErrorSnackbar(false);
+  }
+
   return (
     <>
       <CssBaseline />
@@ -76,20 +92,28 @@ function App() {
         <SearchBox handleSearch={handleSearch} />
       </section>
       <main>
-        { error && <h2>Something went wrong.</h2> }
-        {
-          !error &&
-          (isLoading ?
-            (<h2>Loading...</h2>) :
-            (
-              <>
-                <TodoList todoList={filteredTodoList()} listTitle='To Do' type='todo' toggleCompleteness={toggleCompleteness} />
-                <TodoList todoList={filteredTodoList()} listTitle='Done' type='done' toggleCompleteness={toggleCompleteness} />
-              </>
-            )
-          )
-        }
+        {layoutBlockError && <h2>Something went wrong.</h2>}
+        {!layoutBlockError &&
+          (isLoading ? (
+            <h2>Loading...</h2>
+          ) : (
+            <>
+              <TodoList
+                todoList={filteredTodoList()}
+                listTitle='To Do'
+                type='todo'
+                toggleCompleteness={toggleCompleteness}
+              />
+              <TodoList
+                todoList={filteredTodoList()}
+                listTitle='Done'
+                type='done'
+                toggleCompleteness={toggleCompleteness}
+              />
+            </>
+          ))}
       </main>
+      <ErrorSnackbar open={openErrorSnackbar} handleClose={handleCloseErrorSnackbar} message={nonLayoutBlockError && nonLayoutBlockError.message} />
     </>
   );
 }
