@@ -48,12 +48,31 @@ function App() {
     return todoList.filter((todo) => todo.name.toLowerCase().includes(searchField.toLowerCase()));
   }
 
-  const handleAdd = (name) => {
-    setToDoList([...todoList, {
+  const handleAdd = async (name) => {
+    const newTask = {
       id: todoList.length + 1,
       name,
-      complete: false
-    }]);
+      complete: false,
+    };
+
+    try {
+      await fetchData(`${process.env.REACT_APP_TASKS_API_URL}`, {
+        method: 'post',
+        headers: {
+          'Content-type': 'application/json'
+        },
+        body: JSON.stringify(newTask)
+      });
+
+      setToDoList([
+        ...todoList,
+        newTask,
+      ]);
+    } catch (error) {
+      setNonLayoutBlockError(error);
+      setOpenErrorSnackbar(true);
+    }
+
   };
 
   const handleDeleteAll = async () => {
